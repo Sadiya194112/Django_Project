@@ -1,0 +1,42 @@
+{% extends 'stories/base.html' %}
+
+{% block content %}
+<h2>Your Dashboard</h2>
+
+<h3>Your Stories</h3>
+{% if stories %}
+    <ul>
+        {% for story in stories %}
+            <li>
+                <a href="{% url 'read_story' pk=story.id %}">{{ story.title }}</a> - Created on {{ story.created_at|date:"M d, Y" }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>You haven't created any stories yet.</p>
+{% endif %}
+
+<h3>Analytics</h3>
+<p>Total Reads: {{ analytics.total_reads }}</p>
+
+<h4>Popular Choices:</h4>
+{% if analytics.popular_choices %}
+    <ul>
+        {% for choice in analytics.popular_choices %}
+            <li>{{ choice.choice_made__content }} - {{ choice.count }} times</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No data available yet.</p>
+{% endif %}
+
+{% if analytics.time_spent %}
+    <h4>Average Time Spent per Chapter:</h4>
+    <ul>
+        {% for chapter, avg_time in analytics.time_spent.items %}
+            <li>Chapter {{ chapter }}: {{ avg_time }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% endblock %}
